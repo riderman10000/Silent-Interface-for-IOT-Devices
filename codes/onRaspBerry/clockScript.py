@@ -36,10 +36,11 @@ def current_time_report():
 		textToSpeechEngine.save('currentTextAudio.mp3')
 		playsound('currentTextAudio.mp3')
 
-	textToAudio(hours)
+
+	textToAudio('अब को समय')
+	textToAudio(str(int(hours) % 12))
 	textToAudio(translateSentence('hours', verbose = True))
 	textToAudio(minutes)
 	textToAudio(translateSentence('minutes', verbose = True))
-
 
 current_time_report()

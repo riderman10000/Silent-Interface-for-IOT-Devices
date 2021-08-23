@@ -9,7 +9,10 @@ from brainflow.data_filter import DataFilter, FilterTypes, AggOperations
 
 from playsound import playsound
 
-URL = 'http://127.0.0.1:5000/takeEmg'
+from emg_lib import signal_pipeline, parser
+
+# URL = 'http://127.0.0.1:5000/takeEmg'
+URL = "https://silent-app-test.herokuapp.com/takeEmg"
 PORT = '/dev/ttyUSB0'
 SESSION_RECORD_INTERVAL = 5 # seconds 
 
@@ -45,16 +48,32 @@ playsound('./resources/beep.mp3')
 DataFilter.write_file(data, 'recording/currentRecording.csv', 'w')
 data = np.transpose(data)
 channel_data = data[:, channels]
-# rawdata = []
-# rawdata.append(channel_data)
+
+# to test with data...
+import glob
+import os 
+MAIN_DIR = "."
+while os.path.basename(os.getcwd())!="Silent-Interface-for-IOT-Devices":
+    os.chdir("..")
+
+
+testfiles = glob.glob('./**/test/1.txt', recursive=True)
+print(testfiles)
+all_files = testfiles
+
+rawdata = parser(all_files, NORMALIZE=True, utteranceCountPerFile = 5)
+
+all_data_filtered = rawdata.copy()
+all_data_filtered['data'] = signal_pipeline(rawdata['data'])
 
 # Todo : need to decide if processing should be done in this script or flask
 # TODO : need to trim the length of the recording equal to trained data length
-# filteredData = signal_pipeline(rawdata)
-# dataFeature = feature_pipeline_melspectrogram(filteredData)
-# dataFeature = reshapeChannelIndexToLast(dataFeature)
-
+filteredData = all_data_filtered['data'][0]
 
 # emgData = np.array([1,2,3,4,5,6])
-payload = {'emg' : channel_data.tolist()}
-r = requests.post(URL, json=payload)
+# dataPayload = {'emg' : filteredData.tolist()}
+# r = requests.post(URL, json=dataPayload)
+
+
+resetPayload = {'reset' : 'resets the status in server hopefully'}
+r = requests.post(URL, json=resetPayload)

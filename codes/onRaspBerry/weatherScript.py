@@ -52,4 +52,5 @@ https://www.how2shout.com/how-to/translate-languages-using-python-and-google-tra
 https://stackoverflow.com/questions/52455774/googletrans-stopped-working-with-error-nonetype-object-has-no-attribute-group
 --try pip install googletrans==4.0.0-rc1
 https://dev.to/po/text-to-speech-using-python-gtts-in-5-lines-of-code-462m
+https://pypi.org/project/pyttsx3/
 '''
